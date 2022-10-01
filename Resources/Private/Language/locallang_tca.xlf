@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="EXT:aws_meta/Resources/Private/Language/locallang_tca.xlf" date="2022-06-17T17:55:17Z" product-name="aws_meta">
+        <header/>
+        <body>
+            <trans-unit id="sys_file_metadata.aws_labels" resname="sys_file_metadata.aws_labels">
+                <source>AWS Rekognition labels</source>
+            </trans-unit>
+            <trans-unit id="sys_file_metadata.aws_text" resname="sys_file_metadata.aws_text">
+                <source>AWS Rekognition text</source>
+            </trans-unit>
+            <trans-unit id="sys_file_metadata.aws_custom_labels" resname="sys_file_metadata.aws_custom_labels">
+                <source>AWS Rekognition custom labels</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

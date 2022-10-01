@@ -1,0 +1,10 @@
+# cat=Settings/O; type=string; label= Name of your aws profile
+awsProfile =
+# cat=Settings/O; type=string; label= Name of your aws region
+awsRegion = eu-central-1
+# cat=Settings/O; type=string; label= Name of your aws version
+awsVersion = latest
+# cat=Settings/O; type=string; label= arn for your custom label detection
+awsCustomLabelArn =
+# cat=Settings/O; type=float; label= Default confidence
+confidence = 80

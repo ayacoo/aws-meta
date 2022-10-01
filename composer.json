@@ -1,0 +1,24 @@
+{
+    "name": "ayacoo/aws-meta",
+    "description": "Add file metadata via AWS Rekognition API",
+    "type": "typo3-cms-extension",
+	"author": "Guido Schmechel",
+	"company": "ayacoo",
+    "license": [
+        "GPL-2.0-or-later"
+    ],
+    "require": {
+        "typo3/cms-core": "^11.5",
+        "aws/aws-sdk-php": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ayacoo\\AwsMeta\\": "Classes/"
+        }
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "aws_meta"
+        }
+    }
+}
