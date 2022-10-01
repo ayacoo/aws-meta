@@ -52,7 +52,7 @@ class AwsImageRecognizeService
             }
         }
 
-        return implode(', ', $keywords);
+        return implode(', ', array_unique($keywords));
     }
 
     /**
