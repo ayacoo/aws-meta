@@ -1,34 +1,33 @@
-## Was macht die Extension?
+## What does the extension do?
 
-Es gibt einen Hook der Bilder nach dem Upload in TYPO3 via AWS Rekognition API verarbeitet und die Daten in neue Felder
-in der Tabelle sys_file_metadata ablegt.
+There is a hook that processes images after uploading them to TYPO3 via AWS Rekognition API and puts the data into new fields
+in the table sys_file_metadata.
 
-Die Extension wurde mit https://github.com/b13/make aufgesetzt.
+The extension was set up with https://github.com/b13/make.
 
 ---
 
-## Systemvoraussetzungen
+## System requirements
 
-- Es wird TYPO3 in Version 11 unterstützt
-- PHP 7.4 und 8.0 sollte passen
-- AWS Konto mit entsprechenden Keys
-- EXT:filemetadata muss installiert sein
+- TYPO3 version 11 is supported
+- PHP 7.4 and 8.0 should fit
+- AWS account with appropriate keys
+- EXT:filemetadata must be installed
 
 ---
 
 ## AWS Infos
 
-Die Bilder werden direkt zur Amazon hochgeladen. Dies ist performanter als es erstmal im S3 Bucket
-abzulegen. https://docs.aws.amazon.com/rekognition/latest/dg/images-bytes.html
+The images are uploaded directly to Amazon. This is better performance than storing it in the S3 bucket.
+https://docs.aws.amazon.com/rekognition/latest/dg/images-bytes.html
 
-Unterstützt werden Bilder mit der Dateiendung JPG und PNG.
+Images with the file extension JPG and PNG are supported.
 
-Optimal wäre natürlich ein Command, der diesen Job asynchron durchführt.
+Of course, a command that performs this job asynchronously would be ideal.
 
 ## AWS Secrets
 
-Um die API nutzen zu können, muss man im Home Verzeichnis ein .aws Verzeichnis anlegen. Dort muss eine config und
-credentials Datei liegen.
+To be able to use the API, you have to create an .aws directory in the home directory. There must be a config and  credentials file must be located there.
 
 #### config
 
@@ -46,24 +45,24 @@ aws_access_key_id=
 aws_secret_access_key=
 ```
 
-Zu beachten ist, dass immer dieselbe Region genutzt werden muss. Im Profil, aber auch bei der Bildanalyse. Man kann sich die Einrichtung natürlich bei .ddev in der Config als Hook eintragen.
+It should be noted that the same region must always be used. In the profile, but also in the image analysis. Of course, you can enter the set-up as a hook in .ddev in the Config.
 
 ---
 
 ## Installation
 
-- Zu Beginn muss ein `composer install` durchgeführt werden.
-- In den Extension Einstellungen muss man die AWS Werte setzen.
+- At the beginning, a `composer install` must be executed.
+- In the extension settings you have to set the AWS values.
 
 ---
 
 ## Disclaimer
 
-Die Extension wurde während des [brandung][1] Gewerketages entwickelt und im Nachgang noch optimiert. Die Extension dient lediglich Demo- und Schulungszwecken.
+The extension was developed with the support of the [agency brandung][1] and subsequently optimised. The extension is for demo and training purposes only.
 
 ---
 
-## Quellen
+## Sources
 
 - https://docs.typo3.org/m/typo3/reference-coreapi/11.5/en-us/Events/Events/Index.html
 - https://docs.typo3.org/m/typo3/reference-coreapi/11.5/en-us/Events/Events/Core/Resource/AfterFileAddedEvent.html
