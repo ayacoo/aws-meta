@@ -27,12 +27,12 @@ Of course, a command that performs this job asynchronously would be ideal.
 
 ## AWS Secrets
 
-To be able to use the API, you have to create an .aws directory in the home directory. There must be a config and  credentials file must be located there.
+To be able to use the API, you have to create an .aws directory in the home directory. There must be located a config and credentials file.
 
 #### config
 
 ```
-[profile BENUTZERNAME]
+[profile USERNAME]
 region=eu-central-1
 output=text
 ```
@@ -40,7 +40,7 @@ output=text
 #### credentials
 
 ```
-[BENUTZERNAME]
+[USERNAME]
 aws_access_key_id=
 aws_secret_access_key=
 ```
