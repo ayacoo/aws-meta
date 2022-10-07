@@ -1,0 +1,11 @@
+One of the main goals of the TYPO3 v12 series is speed. That’s right! We will step hard on the gas pedal and increase the performance compared to previous versions of our open-source enterprise content management system.
+
+Overall Goals for TYPO3 v12
+TYPO3 v12 will feature a significant productivity boost, as we aim to make the system the fastest TYPO3 version ever. We have a bunch of ideas of how to achieve this goal up our sleeves, for example:
+
+Improve backend usability, so backend users can manage website content with fewer clicks.
+Enable TYPO3 integrators to create custom content types quickly and easily.
+Simplify the methods for registering backend modules, allowing developers to create custom solutions more efficiently.
+Build new ways to let TYPO3 communicate with third-party systems as outgoing and incoming event notifications (webhooks and reactions).
+Improve performance by leveraging more underlying system layers, such as specialized PHP and database features (see below).
+We plan to release TYPO3 version 12.0 in early October 2022. The first sprint release of the TYPO3 v12 series comes with about 100 new features for editors, integrators and developers. Further changes and improvements will be announced in every sprint release over six months until the LTS-release in April 2023.
