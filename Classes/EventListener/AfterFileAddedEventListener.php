@@ -7,6 +7,7 @@ namespace Ayacoo\AwsMeta\EventListener;
 use Ayacoo\AwsMeta\Service\AwsImageRecognizeService;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Exception;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Resource\Event\AfterFileAddedEvent;
@@ -15,21 +16,18 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class AfterFileAddedEventListener
 {
-    private ?AwsImageRecognizeService $awsImageRecognizeService;
-
     private array $extConf;
 
     public function __construct(
-        AwsImageRecognizeService $awsImageRecognizeService,
-        ExtensionConfiguration   $extensionConfiguration
+        private readonly AwsImageRecognizeService $awsImageRecognizeService,
+        private readonly ExtensionConfiguration   $extensionConfiguration
     )
     {
-        $this->awsImageRecognizeService = $awsImageRecognizeService;
-        $this->extConf = $extensionConfiguration->get('aws_meta') ?? [];
+        $this->extConf = $this->extensionConfiguration->get('aws_meta') ?? [];
     }
 
     /**
-     * @throws \TYPO3\CMS\Core\Exception
+     * @throws Exception
      */
     public function setMetadata(AfterFileAddedEvent $event): AfterFileAddedEvent
     {
@@ -64,13 +62,6 @@ class AfterFileAddedEventListener
         return $event;
     }
 
-    /**
-     * @param string $message
-     * @param int $severity
-     *
-     * @return void
-     * @throws \TYPO3\CMS\Core\Exception
-     */
     protected function addMessageToFlashMessageQueue(string $message, int $severity = FlashMessage::ERROR): void
     {
         if (Environment::isCli()) {

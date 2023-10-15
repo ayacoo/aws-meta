@@ -9,10 +9,14 @@ The extension was set up with https://github.com/b13/make.
 
 ## System requirements
 
-- TYPO3 version 11 is supported
-- PHP 7.4 and 8.0 should fit
+- TYPO3 version 12 is supported
+- PHP 8.1 and 8.2 should fit
 - AWS account with appropriate keys
 - EXT:filemetadata must be installed
+
+## TYPO3 version 11
+
+For TYPO3 version 11 there is the branch 1.0.0
 
 ---
 

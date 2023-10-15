@@ -6,22 +6,30 @@ namespace Ayacoo\AwsMeta\Service;
 
 use Aws\Exception\AwsException;
 use Aws\Rekognition\RekognitionClient;
+use Aws\Result;
 use Exception;
 use Psr\Log\LoggerInterface;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class AwsImageRecognizeService
 {
-    private ?RekognitionClient $rekognitionClient;
-
     private array $extConf;
-    private LoggerInterface $logger;
 
-    public function __construct(ExtensionConfiguration $extensionConfiguration)
+    /**
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     */
+    public function __construct(
+        protected ExtensionConfiguration $extensionConfiguration,
+        private LoggerInterface          $logger,
+        private ?RekognitionClient       $rekognitionClient
+    )
     {
-        $this->extConf = $extensionConfiguration->get('aws_meta') ?? [];
+        $this->extConf = $this->extensionConfiguration->get('aws_meta') ?? [];
         $options = [
             'profile' => $this->extConf['awsProfile'],
             'region' => $this->extConf['awsRegion'],
@@ -31,10 +39,6 @@ class AwsImageRecognizeService
         $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
     }
 
-    /**
-     * @param string $imagePath
-     * @return string
-     */
     public function detectLabels(string $imagePath): string
     {
         $result = $this->recognizeImage($imagePath, 'detectLabels');
@@ -42,7 +46,7 @@ class AwsImageRecognizeService
         $keywords = [];
         foreach ($result as $labels) {
             if (is_array($labels)) {
-                foreach ($labels ?? [] as $label) {
+                foreach ($labels as $label) {
                     $confidence = (float)($label['Confidence'] ?? 0.00);
                     $name = $label['Name'] ?? '';
                     if (($confidence > $this->extConf['confidence']) && !empty($name)) {
@@ -54,11 +58,6 @@ class AwsImageRecognizeService
 
         return implode(', ', array_unique($keywords));
     }
-
-    /**
-     * @param string $imagePath
-     * @return string
-     */
     public function detectText(string $imagePath): string
     {
         $result = $this->recognizeImage($imagePath, 'detectText');
@@ -66,7 +65,7 @@ class AwsImageRecognizeService
         $detectedTextItems = [];
         foreach ($result as $labels) {
             if (is_array($labels)) {
-                foreach ($labels ?? [] as $label) {
+                foreach ($labels as $label) {
                     $confidence = (float)($label['Confidence'] ?? 0.00);
                     $detectedText = $label['DetectedText'] ?? '';
                     if (($confidence > $this->extConf['confidence']) && !empty($detectedText)) {
@@ -79,11 +78,7 @@ class AwsImageRecognizeService
         return implode(', ', array_unique($detectedTextItems));
     }
 
-    /**
-     * @param string $imagePath
-     * @param string $function
-     */
-    protected function recognizeImage(string $imagePath, string $function)
+    protected function recognizeImage(string $imagePath, string $function): Result
     {
         $fpImage = fopen($imagePath, 'rb');
         $image = fread($fpImage, filesize($imagePath));
