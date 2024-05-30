@@ -7,7 +7,7 @@ use Aws\Rekognition\RekognitionClient;
 $options = [
     'profile' => 'USERNAME',
     'region' => 'REGION',
-    'version' => 'latest'
+    'version' => 'latest',
 ];
 $rekognition = new RekognitionClient($options);
 
@@ -16,19 +16,18 @@ $fp_image = fopen($photo, 'r');
 $image = fread($fp_image, filesize($photo));
 fclose($fp_image);
 
-$result = $rekognition->detectText([
+$result = $rekognition->detectText(
+    [
         'Image' => [
             'Bytes' => $image,
         ],
-        'Attributes' => ['ALL']
+        'Attributes' => ['ALL'],
     ]
 );
 
 echo '<pre>';
 print_r($result);
 echo '</pre>';
-
-
 
 $keywords = [];
 foreach ($result ?? [] as $labels) {

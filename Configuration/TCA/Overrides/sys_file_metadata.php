@@ -1,6 +1,8 @@
 <?php
 
-defined('TYPO3') or die();
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
+defined('TYPO3') || die();
 
 $tca = [
     'columns' => [
@@ -39,11 +41,11 @@ $tca = [
 
 $GLOBALS['TCA']['sys_file_metadata'] = array_replace_recursive($GLOBALS['TCA']['sys_file_metadata'], $tca);
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
+ExtensionManagementUtility::addTCAcolumns(
     'sys_file_metadata',
     $tca
 );
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
+ExtensionManagementUtility::addToAllTCAtypes(
     'sys_file_metadata',
     'aws_labels, aws_text, aws_custom_labels',
     '',
