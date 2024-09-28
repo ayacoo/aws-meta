@@ -4,13 +4,13 @@
         <header/>
         <body>
             <trans-unit id="sys_file_metadata.aws_labels" resname="sys_file_metadata.aws_labels">
-                <source>AWS Recognition labels</source>
+                <source>AWS Rekognition labels</source>
             </trans-unit>
             <trans-unit id="sys_file_metadata.aws_text" resname="sys_file_metadata.aws_text">
-                <source>AWS Recognition text</source>
+                <source>AWS Rekognition text</source>
             </trans-unit>
             <trans-unit id="sys_file_metadata.aws_custom_labels" resname="sys_file_metadata.aws_custom_labels">
-                <source>AWS Recognition custom labels</source>
+                <source>AWS Rekognition custom labels</source>
             </trans-unit>
         </body>
     </file>

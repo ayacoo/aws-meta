@@ -1,8 +1,8 @@
 <?php
 
 $EM_CONF[$_EXTKEY] = [
-    'title' => 'AWS Image Recognition',
-    'description' => 'Add file metadata via AWS Recognition',
+    'title' => 'AWS Image Rekognition',
+    'description' => 'Add file metadata via AWS Rekognition',
     'category' => 'plugin',
     'author' => 'Guido Schmechel',
     'author_email' => 'info@ayacoo.de',

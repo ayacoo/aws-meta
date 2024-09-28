@@ -1,19 +1,19 @@
-# detectLabels.php (AWS Recognition API)
+# detectLabels.php (AWS Rekognition API)
 
 - S3 support or image can be transferred
 - Categories (labels) are assigned to the image
 
-# detectText.php (AWS Recognition API)
+# detectText.php (AWS Rekognition API)
 
 - S3 support or image can be transferred
-- Visual image recognition
+- Visual image Rekognition
 - Only used to read text
 
 # textract.php (AWS Textract API)
 
 - S3 support or image can be transferred
-- Text recognition (OCR) on an image
-- Text recognition (OCR) of a specific area
+- Text Rekognition (OCR) on an image
+- Text Rekognition (OCR) of a specific area
 - More logic possible with the results
 
 # transcribe.php (AWS Transcribe API)
@@ -24,6 +24,6 @@
 # comprehend (AWS Comprehend API)
 
 - Supported languages https://docs.aws.amazon.com/comprehend/latest/dg/supported-languages.html
-- Speech recognition
+- Speech Rekognition
 - Key Phrases
 - Entities

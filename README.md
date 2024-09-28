@@ -1,7 +1,7 @@
 ## What does the extension do?
 
 There is a hook that processes images after uploading them to TYPO3 via AWS
-Recognition API and puts the data into new fields in the table
+Rekognition API and puts the data into new fields in the table
 sys_file_metadata.
 
 ---
