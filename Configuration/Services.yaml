@@ -6,9 +6,3 @@ services:
   Ayacoo\AwsMeta\:
     resource: '../Classes/*'
     exclude: '../Classes/Domain/Model/*'
-  Ayacoo\AwsMeta\EventListener\AfterFileAddedEventListener:
-    tags:
-      - name: event.listener
-        identifier: ayacoo/aws-meta/after-file-added-event-listener
-        event: TYPO3\CMS\Core\Resource\Event\AfterFileAddedEvent
-        method: 'setMetadata'

@@ -5,17 +5,19 @@ declare(strict_types=1);
 namespace Ayacoo\AwsMeta\EventListener;
 
 use Ayacoo\AwsMeta\Service\AwsImageRecognizeService;
+use TYPO3\CMS\Core\Attribute\AsEventListener;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Exception;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Resource\Event\AfterFileAddedEvent;
 use TYPO3\CMS\Core\Resource\File;
-use TYPO3\CMS\Core\Resource\MetaDataAspect;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+#[AsEventListener(
+    identifier: 'ayacoo/aws-meta/after-file-added-event-listener'
+)]
 class AfterFileAddedEventListener
 {
     private array $extConf;
@@ -27,9 +29,6 @@ class AfterFileAddedEventListener
         $this->extConf = $this->extensionConfiguration->get('aws_meta') ?? [];
     }
 
-    /**
-     * @throws Exception
-     */
     public function setMetadata(AfterFileAddedEvent $event): AfterFileAddedEvent
     {
         if (!$this->hasAllAwsSettings()) {
@@ -43,7 +42,6 @@ class AfterFileAddedEventListener
         $extension = strtolower($file->getExtension());
         $imageExtensions = ['jpg', 'png'];
         if (in_array($extension, $imageExtensions, true) && $file->getPublicUrl() !== null) {
-            /** @var MetaDataAspect $metaData */
             $metaData = $file->getMetaData();
             $keywords = $this->awsImageRecognizeService->detectLabels($filePath);
             if ($keywords !== '') {
