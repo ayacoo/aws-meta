@@ -29,10 +29,10 @@ class AfterFileAddedEventListener
         $this->extConf = $this->extensionConfiguration->get('aws_meta') ?? [];
     }
 
-    public function setMetadata(AfterFileAddedEvent $event): AfterFileAddedEvent
+    public function __invoke(AfterFileAddedEvent $event): void
     {
         if (!$this->hasAllAwsSettings()) {
-            return $event;
+            return;
         }
 
         /** @var File $file */
@@ -58,8 +58,6 @@ class AfterFileAddedEventListener
                 ContextualFeedbackSeverity::INFO
             );
         }
-
-        return $event;
     }
 
     protected function addMessageToFlashMessageQueue(
