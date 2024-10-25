@@ -5,65 +5,65 @@ declare(strict_types=1);
 namespace Ayacoo\AwsMeta\EventListener;
 
 use Ayacoo\AwsMeta\Service\AwsImageRecognizeService;
+use TYPO3\CMS\Core\Attribute\AsEventListener;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Exception;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Resource\Event\AfterFileAddedEvent;
-use TYPO3\CMS\Core\Resource\MetaDataAspect;
+use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+#[AsEventListener(
+    identifier: 'ayacoo/aws-meta/after-file-added-event-listener'
+)]
 class AfterFileAddedEventListener
 {
     private array $extConf;
 
     public function __construct(
         private readonly AwsImageRecognizeService $awsImageRecognizeService,
-        private readonly ExtensionConfiguration   $extensionConfiguration
-    )
-    {
+        private readonly ExtensionConfiguration $extensionConfiguration
+    ) {
         $this->extConf = $this->extensionConfiguration->get('aws_meta') ?? [];
     }
 
-    /**
-     * @throws Exception
-     */
-    public function setMetadata(AfterFileAddedEvent $event): AfterFileAddedEvent
+    public function __invoke(AfterFileAddedEvent $event): void
     {
         if (!$this->hasAllAwsSettings()) {
-            return $event;
+            return;
         }
 
+        /** @var File $file */
         $file = $event->getFile();
         $filePath = Environment::getPublicPath() . $file->getPublicUrl();
 
         $extension = strtolower($file->getExtension());
         $imageExtensions = ['jpg', 'png'];
-        if (in_array($extension, $imageExtensions, true) && !empty($file->getPublicUrl())) {
-            /** @var MetaDataAspect $metaData */
+        if (in_array($extension, $imageExtensions, true) && $file->getPublicUrl() !== null) {
             $metaData = $file->getMetaData();
             $keywords = $this->awsImageRecognizeService->detectLabels($filePath);
-            if (!empty($keywords)) {
+            if ($keywords !== '') {
                 $metaData->offsetSet('aws_labels', $keywords);
             }
             $detectedText = $this->awsImageRecognizeService->detectText($filePath);
-            if (!empty($detectedText)) {
+            if ($detectedText !== '') {
                 $metaData->offsetSet('aws_text', $detectedText);
             }
             $metaData->save();
 
             $this->addMessageToFlashMessageQueue(
                 'The metadata was updated via AWS Rekognition API',
-                FlashMessage::INFO
+                ContextualFeedbackSeverity::INFO
             );
         }
-
-        return $event;
     }
 
-    protected function addMessageToFlashMessageQueue(string $message, int $severity = FlashMessage::ERROR): void
-    {
+    protected function addMessageToFlashMessageQueue(
+        string $message,
+        ContextualFeedbackSeverity $severity = ContextualFeedbackSeverity::ERROR
+    ): void {
         if (Environment::isCli()) {
             return;
         }
@@ -83,6 +83,7 @@ class AfterFileAddedEventListener
 
     private function hasAllAwsSettings(): bool
     {
-        return !empty($this->extConf['awsProfile']) && !empty($this->extConf['awsRegion']) && !empty($this->extConf['awsVersion']);
+        return $this->extConf['awsProfile'] !== '' && $this->extConf['awsRegion'] !== '' &&
+            $this->extConf['awsVersion'] !== '';
     }
 }

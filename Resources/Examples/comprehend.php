@@ -5,11 +5,10 @@ use Aws\Exception\AwsException;
 
 require '../../vendor/autoload.php';
 
-
 $options = [
     'profile' => 'USERNAME',
     'region' => 'REGION',
-    'version' => 'latest'
+    'version' => 'latest',
 ];
 $client = new ComprehendClient($options);
 
@@ -18,7 +17,7 @@ $text = file_get_contents('/var/www/html/public/examples/comprehend.txt');
 try {
     echo '<h3>DetectDominantLanguage</h3>';
     $result = $client->detectDominantLanguage([
-        'Text' => $text
+        'Text' => $text,
     ]);
     echo '<pre>';
     print_r($result);
@@ -27,7 +26,7 @@ try {
     echo '<h3>Detect entities</h3>';
     $result = $client->detectEntities([
         'Text' => $text,
-        'LanguageCode' => 'en'
+        'LanguageCode' => 'en',
     ]);
     echo '<pre>';
     print_r($result);
@@ -36,7 +35,7 @@ try {
     echo '<h3>DetectKeyPhrases</h3>';
     $result = $client->detectKeyPhrases([
         'Text' => $text,
-        'LanguageCode' => 'en'
+        'LanguageCode' => 'en',
     ]);
 
     $list = [];
@@ -51,8 +50,6 @@ try {
     echo '<pre>';
     print_r($list);
     echo '</pre>';
-
-
 } catch (AwsException $e) {
     echo '<pre>Error: $e</pre>';
 }

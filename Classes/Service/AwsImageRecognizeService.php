@@ -6,7 +6,7 @@ namespace Ayacoo\AwsMeta\Service;
 
 use Aws\Exception\AwsException;
 use Aws\Rekognition\RekognitionClient;
-use Aws\Result;
+use Aws\ResultInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
@@ -25,15 +25,14 @@ class AwsImageRecognizeService
      */
     public function __construct(
         protected ExtensionConfiguration $extensionConfiguration,
-        private LoggerInterface          $logger,
-        private ?RekognitionClient       $rekognitionClient
-    )
-    {
+        private LoggerInterface $logger,
+        private ?RekognitionClient $rekognitionClient
+    ) {
         $this->extConf = $this->extensionConfiguration->get('aws_meta') ?? [];
         $options = [
             'profile' => $this->extConf['awsProfile'],
             'region' => $this->extConf['awsRegion'],
-            'version' => $this->extConf['awsVersion']
+            'version' => $this->extConf['awsVersion'],
         ];
         $this->rekognitionClient = new RekognitionClient($options);
         $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
@@ -49,7 +48,7 @@ class AwsImageRecognizeService
                 foreach ($labels as $label) {
                     $confidence = (float)($label['Confidence'] ?? 0.00);
                     $name = $label['Name'] ?? '';
-                    if (($confidence > $this->extConf['confidence']) && !empty($name)) {
+                    if (($confidence > $this->extConf['confidence']) && $name !== '') {
                         $keywords[] = $name;
                     }
                 }
@@ -58,6 +57,7 @@ class AwsImageRecognizeService
 
         return implode(', ', array_unique($keywords));
     }
+
     public function detectText(string $imagePath): string
     {
         $result = $this->recognizeImage($imagePath, 'detectText');
@@ -68,7 +68,7 @@ class AwsImageRecognizeService
                 foreach ($labels as $label) {
                     $confidence = (float)($label['Confidence'] ?? 0.00);
                     $detectedText = $label['DetectedText'] ?? '';
-                    if (($confidence > $this->extConf['confidence']) && !empty($detectedText)) {
+                    if (($confidence > $this->extConf['confidence']) && $detectedText !== '') {
                         $detectedTextItems[] = $detectedText;
                     }
                 }
@@ -78,22 +78,30 @@ class AwsImageRecognizeService
         return implode(', ', array_unique($detectedTextItems));
     }
 
-    protected function recognizeImage(string $imagePath, string $function): Result
+    protected function recognizeImage(string $imagePath, string $function): array|ResultInterface
     {
         $fpImage = fopen($imagePath, 'rb');
         $image = fread($fpImage, filesize($imagePath));
         fclose($fpImage);
 
         try {
-            return $this->rekognitionClient->$function([
-                    'Image' => [
-                        'Bytes' => $image,
-                    ],
-                    'Attributes' => ['ALL']
-                ]
-            );
+            $arguments = [
+                'Image' => [
+                    'Bytes' => $image,
+                ],
+                'Attributes' => ['ALL'],
+            ];
+
+            return match ($function) {
+                'detectLabels' => $this->rekognitionClient->detectLabels($arguments),
+                'detectText' => $this->rekognitionClient->detectText($arguments),
+                default => [],
+            };
         } catch (AwsException $e) {
-            $this->logger->error('AWS Exception', [$e->getAwsRequestId(), $e->getAwsErrorType(), $e->getAwsErrorCode()]);
+            $this->logger->error(
+                'AWS Exception',
+                [$e->getAwsRequestId(), $e->getAwsErrorType(), $e->getAwsErrorCode()]
+            );
             return [];
         } catch (Exception $e) {
             $this->logger->error($e->getMessage());

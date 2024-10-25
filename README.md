@@ -1,28 +1,27 @@
 ## What does the extension do?
 
-There is a hook that processes images after uploading them to TYPO3 via AWS Rekognition API and puts the data into new fields
-in the table sys_file_metadata.
-
-The extension was set up with https://github.com/b13/make.
+There is a hook that processes images after uploading them to TYPO3 via AWS
+Rekognition API and puts the data into new fields in the table
+sys_file_metadata.
 
 ---
 
 ## System requirements
 
-- TYPO3 version 12 is supported
-- PHP 8.1 and 8.2 should fit
 - AWS account with appropriate keys
-- EXT:filemetadata must be installed
 
-## TYPO3 version 11
-
-For TYPO3 version 11 there is the branch 1.0.0
+| AwsMeta | TYPO3 | PHP       | Support / Development                |
+|---------|-------|-----------|--------------------------------------|
+| 3.x     | 13.x  | 8.2 - 8.3 | features, bugfixes, security updates |
+| 2.x     | 12.x  | 8.1 - 8.3 | bugfixes, security updates           |
+| 1.x     | 11.x  | 7.4 - 8.0 | bugfixes, security updates           |
 
 ---
 
-## AWS Infos
+## AWS Information
 
-The images are uploaded directly to Amazon. This is better performance than storing it in the S3 bucket.
+The images are uploaded directly to Amazon. This is better performance than
+storing it in the S3 bucket.
 https://docs.aws.amazon.com/rekognition/latest/dg/images-bytes.html
 
 Images with the file extension JPG and PNG are supported.
@@ -31,7 +30,8 @@ Of course, a command that performs this job asynchronously would be ideal.
 
 ## AWS Secrets
 
-To be able to use the API, you have to create an .aws directory in the home directory. There must be located a config and credentials file.
+To be able to use the API, you have to create an .aws directory in the home
+directory. There must be located a config and credentials file.
 
 #### config
 
@@ -49,20 +49,27 @@ aws_access_key_id=
 aws_secret_access_key=
 ```
 
-It should be noted that the same region must always be used. In the profile, but also in the image analysis. Of course, you can enter the set-up as a hook in .ddev in the Config.
+It should be noted that the same region must always be used. In the profile, but
+also in the image analysis. Of course, you can enter the set-up as a hook in
+.ddev in the Config.
 
 ---
 
 ## Installation
 
 - At the beginning, a `composer install` must be executed.
-- In the extension settings you have to set the AWS values.
+- In the extension settings you have to set the AWS values, e.g. the profile
+  name.
+- You should execute the database analyzer
 
 ---
 
 ## Disclaimer
 
-The extension was developed with the support of the [agency brandung][1] and subsequently optimised. The extension is for demo and training purposes only.
+The extension was developed with the support of the [agency brandung][1] and
+subsequently optimised. The extension is for demo and training purposes only.
+
+The extension was set up with https://github.com/b13/make.
 
 ---
 

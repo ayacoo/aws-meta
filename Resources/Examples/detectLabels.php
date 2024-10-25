@@ -7,7 +7,7 @@ use Aws\Rekognition\RekognitionClient;
 $options = [
     'profile' => 'USERNAME',
     'region' => 'REGION',
-    'version' => 'latest'
+    'version' => 'latest',
 ];
 $rekognition = new RekognitionClient($options);
 
@@ -18,12 +18,13 @@ fclose($fp_image);
 
 $confidence = 90;
 
-$result = $rekognition->detectLabels([
+$result = $rekognition->detectLabels(
+    [
         'LanguageCode' => 'de-DE',
         'Image' => [
             'Bytes' => $image,
         ],
-        'Attributes' => ['ALL']
+        'Attributes' => ['ALL'],
     ]
 );
 

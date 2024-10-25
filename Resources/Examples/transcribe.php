@@ -12,11 +12,10 @@
 
 require '../../vendor/autoload.php';
 
-
 $options = [
     'profile' => 'USERNAME',
     'region' => 'REGION',
-    'version' => 'latest'
+    'version' => 'latest',
 ];
 $awsTranscribeClient = new \Aws\TranscribeService\TranscribeServiceClient($options);
 
@@ -30,25 +29,25 @@ try {
         'Media' => [
             'MediaFileUri' => $mediaUrl,
         ],
-        "Settings" => [
-            "VocabularyName" => "YOUR_VOCABULARY_NAME"
+        'Settings' => [
+            'VocabularyName' => 'YOUR_VOCABULARY_NAME',
         ],
         'TranscriptionJobName' => $jobId,
-        "OutputBucketName" => "BUCKETNAME",
-        "OutputKey" => "transcribe/",
-        "Subtitles" => [
-            "Formats" => [
-                "vtt","srt"
+        'OutputBucketName' => 'BUCKETNAME',
+        'OutputKey' => 'transcribe/',
+        'Subtitles' => [
+            'Formats' => [
+                'vtt', 'srt',
             ],
-            "OutputStartIndex" => 1
-        ]
+            'OutputStartIndex' => 1,
+        ],
 
     ]);
 
     $status = [];
     while (true) {
         $status = $awsTranscribeClient->getTranscriptionJob([
-            'TranscriptionJobName' => $jobId
+            'TranscriptionJobName' => $jobId,
         ]);
 
         if ($status->get('TranscriptionJob')['TranscriptionJobStatus'] === 'COMPLETED') {
@@ -57,7 +56,6 @@ try {
 
         sleep(5);
     }
-
 
     $url = $status->get('TranscriptionJob')['Transcript']['TranscriptFileUri'];
     $curl = curl_init();

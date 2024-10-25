@@ -30,7 +30,7 @@ $yMax = 1020;
 $options = [
     'profile' => 'USERNAME',
     'region' => 'REGION',
-    'version' => 'latest'
+    'version' => 'latest',
 ];
 $client = new TextractClient($options);
 
@@ -62,7 +62,6 @@ try {
         </tr>';
     foreach ($result['Blocks'] as $phrase) {
         if ($phrase['BlockType'] === 'LINE') {
-
             // Polygon Check
             $polygon = $phrase['Geometry']['Polygon'];
             $textIsInArea = true;
@@ -82,17 +81,16 @@ try {
             }
 
             //if ($textIsInArea) {
-                $i++;
-                echo '<tr><td>' . $i . '</td>';
-                echo '<td>' . $phrase['BlockType'] . '</td>';
-                echo '<td>' . $phrase['Text'] . '</td>';
-                echo '<td>' . round($phrase['Confidence']) . '%</td>';
-                echo '</tr>';
+            $i++;
+            echo '<tr><td>' . $i . '</td>';
+            echo '<td>' . $phrase['BlockType'] . '</td>';
+            echo '<td>' . $phrase['Text'] . '</td>';
+            echo '<td>' . round($phrase['Confidence']) . '%</td>';
+            echo '</tr>';
             //}
         }
     }
     echo '</table>';
-
 } catch (AwsException $e) {
     echo '<pre>Error: $e</pre>';
 }
